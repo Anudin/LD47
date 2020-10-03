@@ -16,11 +16,21 @@ _global_script_class_icons={
 [application]
 
 config/name="Totally Relaxed Death Race"
+run/main_scene="res://Screens/Main.tscn"
 config/icon="res://icon.png"
 
 [audio]
 
 enable_audio_input=true
+
+[display]
+
+window/size/width=1920
+window/size/height=1080
+window/size/test_width=1280
+window/size/test_height=720
+window/stretch/mode="viewport"
+window/stretch/aspect="keep"
 
 [rendering]
 
