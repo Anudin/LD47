@@ -5,7 +5,7 @@ signal loudness_available
 
 
 var mic: AudioEffectRecord
-const MIN_RECORD_LENGTH = 0.25
+var min_record_length = 0.2
 var time_passed = 0
 
 
@@ -15,11 +15,17 @@ func _ready():
 
 
 func _process(delta):
-	if mic.is_recording_active() and time_passed >= MIN_RECORD_LENGTH:
+	assert(mic.is_recording_active())
+	if time_passed >= min_record_length:
 		time_passed = 0
-		var recording = read_16bit_samples(mic.get_recording())
-		emit_signal("loudness_available", recording.max())
-		mic.set_recording_active(true)	
+		var samples = mic.get_recording()
+		if samples != null :
+			var recording = read_16bit_samples(samples)
+			# read_16bit_samples measures positive and negative amplitude between -1 and 1
+			emit_signal("loudness_available", max(recording.max(), -recording.min()))
+			mic.set_recording_active(true)
+		else:
+			min_record_length += 0.05
 	time_passed += delta
 
 
